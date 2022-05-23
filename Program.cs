@@ -11,7 +11,9 @@ namespace Algorithms
         static void Main()
         {
             Console.Title = "Algorithm and Data Structure";
-            MainMenu.Show();
+
+            Menu mainMenu = new Menu(MenuLists.mainMenu, "Main");
+
         }
 
     }

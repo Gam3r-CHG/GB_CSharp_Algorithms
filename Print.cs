@@ -23,26 +23,30 @@ namespace Algorithms
 
             Console.WriteLine();
 
-            Stopwatch sw = Stopwatch.StartNew();
+            Stopwatch sw = new Stopwatch();
 
+            sw.Restart();
             Console.Write(GetNumbers.FibonacciFormula(t));
+            sw.Stop();
             Console.WriteLine($" вычислено по формуле Бине за {sw.ElapsedMilliseconds} мс, {sw.ElapsedTicks} тактов");
 
             sw.Restart();
             Console.Write(GetNumbers.FibonacciLoop(t));
+            sw.Stop();
             Console.WriteLine($" вычислено циклом за {sw.ElapsedMilliseconds} мс, {sw.ElapsedTicks} тактов");
 
             sw.Restart();
             Console.Write(GetNumbers.FibonacciR(t));
+            sw.Stop();
             Console.WriteLine($" вычислено рекурсией за {sw.ElapsedMilliseconds} мс, {sw.ElapsedTicks} тактов");
 
-            sw.Restart();
             Console.WriteLine();
+            sw.Restart();
             FibonacciLoop(t);
+            sw.Stop();
             Console.WriteLine();
             Console.WriteLine($"Напечатано с помощью цикла за {sw.ElapsedMilliseconds} мс, {sw.ElapsedTicks} тактов");
 
-            sw.Stop();
             Console.WriteLine();
         }
 
