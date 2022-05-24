@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace Algorithms
+namespace Algorithms.Menu
 {
     /// <summary>
     /// Класс для хранения списков меню
     /// </summary>
-    internal class MenuLists
+    internal class Lists
     {
-        public static List<string> mainMenu = new()
+        public static List<string> MainMenu = new()
         {
                 "Главное меню:",
                 "Урок 1",

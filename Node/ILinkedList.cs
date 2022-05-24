@@ -1,4 +1,4 @@
-﻿namespace Algorithms
+﻿namespace Algorithms.Node
 {
     /// <summary>
     /// Интерфейс для задания LinkedList

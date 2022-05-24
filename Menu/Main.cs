@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Algorithms
+namespace Algorithms.Menu
 {
     /// <summary>
     /// Главное меню
     /// </summary>
-    internal class MainMenu
+    internal class Main
     {
         /// <summary>
         /// Главное меню (опции)
@@ -16,10 +16,10 @@ namespace Algorithms
             switch (option)
             {
                 case 1:
-                    Menu lesson1 = new Menu(MenuLists.Lesson1Menu, "Sub"); // Меню 1 урока
+                    MenuBuilder lesson1 = new (Lists.Lesson1Menu, "Sub"); // Меню 1 урока
                     break;
                 case 2:
-                    Menu lesson2 = new Menu(MenuLists.Lesson2Menu, "Sub"); // Меню 1 урока
+                    MenuBuilder lesson2 = new (Lists.Lesson2Menu, "Sub"); // Меню 1 урока
                     break;
                 case 3:
                 case 4:

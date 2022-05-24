@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Algorithms.Lessons;
+using System;
 using System.Collections.Generic;
 
-namespace Algorithms
+namespace Algorithms.Menu
 {
     /// <summary>
     /// Создание меню и подменю
     /// </summary>
-    internal class Menu
+    internal class MenuBuilder
     {
         List<string> List { get; } // Список элементов меню
         string MenuType { get; } // Тип меню (Main или Sub)
@@ -17,7 +18,7 @@ namespace Algorithms
         /// </summary>
         /// <param name="list">Список элементов</param>
         /// <param name="menuType">Тип меню (Main, Sub)</param>
-        public Menu(List<string> list, string menuType)
+        public MenuBuilder(List<string> list, string menuType)
         {
             List = list;
             MenuType = menuType;
@@ -39,7 +40,7 @@ namespace Algorithms
                 switch (List[0]) // Выбор действия в зависимости от названия меню (первая строчка списка)
                 {
                     case "Главное меню:":
-                        MainMenu.MenuOptions(menuOption);
+                        Main.MenuOptions(menuOption);
                         break;
                     case "Урок 1:":
                         Lesson1.MenuOptions(menuOption);

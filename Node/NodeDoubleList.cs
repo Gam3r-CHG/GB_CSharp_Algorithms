@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections;
 
-namespace Algorithms
+namespace Algorithms.Node
 {
-
-    //------------------------------------------------------------------------------------
-    // Односвязный список не требовался для задания. Но я начал с него, чтобы понять
-    // разницу. Они почти идентичны, поэтому можно односвязный не проверять,
-    // а начать сразу с двусвязного.
-    //------------------------------------------------------------------------------------
-
-
-
     /// <summary>
-    /// Класс, отвечающий за создание односвязного списка и его логику работы
+    /// Класс, отвечающий за создание двусвязного списка и его логику работы
     /// </summary>
-    public class NodeList : ILinkedList, IEnumerable
+    public class NodeDoubleList : ILinkedList, IEnumerable
     {
         // Скрытые поля класса
         private Node startNode;         // Первый элемент списка (голова поезда)
@@ -50,7 +41,11 @@ namespace Algorithms
             if (startNode == null) { startNode = node; }
 
             // В противном случае (если список не пустой) - записываем его следующим элементом
-            else { endNode.Next = node; }
+            else
+            {
+                endNode.Next = node;
+                node.Prev = endNode; // Бывший "хвост" становится предыдущим
+            }
 
             endNode = node;     // Новый элемент теперь является последним элементом, "хвостом поезда"
 
@@ -65,6 +60,9 @@ namespace Algorithms
         /// <param name="value"></param>
         public void AddNodeAfter(Node nodeA, int value)
         {
+            // Если узел передан null
+            if (nodeA == null) { Console.WriteLine("AddNodeAfter: Ошибка! Узел = null."); return; }
+
             // Если стартовый узел еще пустой (пустой список) - выходим из метода
             if (startNode == null) { Console.WriteLine("AddNodeAfter: Ошибка! Список пустой."); return; }
 
@@ -74,9 +72,12 @@ namespace Algorithms
             Node node = new Node(value);    // Создаем новый "узел", со значением value
 
             node.Next = nodeA.Next;         // Вставляем между
+            node.Prev = nodeA;
             nodeA.Next = node;
-            Count++;
 
+            node.Next.Prev = node;
+
+            Count++;
             Console.WriteLine("AddNodeAfter: После элемента списка \"" + nodeA.Value + "\" добавить \"" + value + "\"");
         }
 
@@ -96,15 +97,20 @@ namespace Algorithms
             // Если индекс 0 (первый элемент) вызываем метод RemoveFirst
             if (index == 0) { RemoveFirst(); return; }
 
+            // Если индекс последний вызываем метод RemoveLast
+            if (index == Count - 1) { RemoveLast(); return; }
+
+
             Node node = startNode;
             int nodeIndex = 0;          // Для нумерации
             while (node != null)        // Идем по списку последовательно, до последнего элемента
             {
-                if (nodeIndex == index - 1)
+                if (nodeIndex == index)
                 {
-                    Console.WriteLine("RemoveNode: Элемент с индексом " + index + " со значением \"" + node.Next.Value + "\" был удален!");
-                    node.Next = node.Next.Next; // Разрываем связь элементов
-                    Count--;                    // Уменьшаем счетчик элементов
+                    Console.WriteLine("RemoveNode: Элемент с индексом " + index + " со значением \"" + node.Value + "\" был удален!");
+                    node.Prev.Next = node.Next;             // Разрываем связь элементов
+                    node.Next.Prev = node.Prev;
+                    Count--;                                // Уменьшаем счетчик элементов
                     return;
                 }
                 node = node.Next;
@@ -113,7 +119,7 @@ namespace Algorithms
         }
 
         /// <summary>
-        /// Удаляет указанный элемент (узел). Сложность метода O(n)
+        /// Удаляет указанный элемент (узел). Сложность метода O(1)
         /// </summary>
         /// <param name="node">Элемент (узел)</param>
         public void RemoveNode(Node nodeR)
@@ -127,33 +133,15 @@ namespace Algorithms
             // Если искомый узел первый вызываем метод RemoveFirst
             if (nodeR == startNode) { RemoveFirst(); return; }
 
-            Node node = startNode;
-            Node previous = null;   // Чтобы знать предыдущий узел
-            int nodeIndex = 0;      // Для нумерации
+            // Если элемент последний вызываем метод RemoveLast
+            if (nodeR.Next == null) { RemoveLast(); return; }
 
+            Console.WriteLine("RemoveNode: Элемент со значением \"" + nodeR.Value + "\" был удален!");
 
-            while (node != null)    // Идем по списку последовательно, до последнего элемента
-            {
-                if (node == nodeR && node.Next != null)         //Если элемент не последний
-                {
-                    Console.WriteLine("RemoveNode: Элемент со значением \"" + node.Value + "\" с индексом " + (nodeIndex) + " был удален!");
-                    previous.Next = node.Next;                  // Разрываем связь элементов
-                    Count--;                                    // Уменьшаем счетчик элементов
-                    return;
-                }
-                else if (node == nodeR && node.Next == null)    // Если элемент последний
-                {
-                    Console.WriteLine("RemoveNode: Элемент со значением \"" + node.Value + "\" с индексом " + (nodeIndex) + " (endNode) был удален!");
-                    previous.Next = null;                       // Разрываем связь элементов
-                    endNode = previous;                         // Делаем предыдущий узел "концом поезда"
-                    Count--;                                    // Уменьшаем счетчик элементов
-                    return;
-                }
-
-                previous = node;                // Запоминаем предыдущий узел
-                node = node.Next;               // Переходим к следующему элементу
-                nodeIndex++;
-            }
+            nodeR.Next.Prev = nodeR.Prev;               // Разрываем связь элементов
+            nodeR.Prev.Next = nodeR.Next;
+            nodeR = null;
+            Count--;                                    // Уменьшаем счетчик элементов
         }
 
 
@@ -199,7 +187,9 @@ namespace Algorithms
             if (startNode == null) { Console.WriteLine("RemoveFirst: Ошибка! Список пустой."); return; }
 
             Console.WriteLine("RemoveFirst: Первый элемент списка со значением \"" + startNode.Value + "\" был удален!");
+            startNode.Next.Prev = null;
             startNode = startNode.Next;     // Удаляем первый элемент
+
             Count--;                        // Уменьшаем счетчик элементов
 
             if (Count == 0)                 // Если после удаления список пуст
@@ -208,6 +198,19 @@ namespace Algorithms
                 endNode = null;
                 Console.WriteLine("RemoveFirst: Список теперь пустой!");
             }
+        }
+
+
+        /// <summary>
+        /// Удаляет последний элемент.
+        /// </summary>
+        public void RemoveLast()
+        {
+            Console.WriteLine("RemoveLast: Последний элемент списка со значением \"" + endNode.Value + "\" был удален!");
+            endNode.Prev.Next = null;       // Удаляем первый элемент
+            endNode = endNode.Prev;         // Делаем предыдущий "хвостом поезда"
+
+            Count--;                        // Уменьшаем счетчик элементов
         }
 
 
@@ -224,29 +227,24 @@ namespace Algorithms
             if (startNode.Value == searchValue) { RemoveFirst(); return; }
 
             Node node = startNode;
-            Node previous = null;               // Чтобы знать предыдущий узел
             int nodeIndex = 0;                  // Для нумерации
-
 
             while (node != null)                // Идем по списку последовательно, до последнего элемента
             {
                 if (node.Value == searchValue && node.Next != null)       //Если элемент не последний
                 {
-                    Console.WriteLine("Remove: Элемент со значением \"" + searchValue + "\" с индексом " + (nodeIndex) + " был удален!");
-                    previous.Next = node.Next;  // Разрываем связь элементов
+                    Console.WriteLine("Remove: Элемент со значением \"" + searchValue + "\" с индексом " + nodeIndex + " был удален!");
+                    node.Next.Prev = node.Prev; // Разрываем связь элементов
+                    node.Prev.Next = node.Next;
                     Count--;                    // Уменьшаем счетчик элементов
                     return;
                 }
-                else if (node.Value == searchValue && node.Next == null)  // Если элемент последний
+                else if (node.Value == searchValue && node.Next == null)  // Если элемент последний вызываем метод RemoveLast
                 {
-                    Console.WriteLine("RemoveNode: Элемент со значением \"" + searchValue + "\" с индексом " + nodeIndex + " (endNode) был удален!");
-                    previous.Next = null;       // Разрываем связь элементов
-                    endNode = previous;         // Делаем предыдущий узел "концом поезда"
-                    Count--;                    // Уменьшаем счетчик элементов
+                    RemoveLast();
                     return;
                 }
 
-                previous = node;                // Запоминаем предыдущий узел
                 node = node.Next;               // Переходим к следующему элементу
                 nodeIndex++;
             }
@@ -272,9 +270,11 @@ namespace Algorithms
         {
             Node node = new Node(value);        // Создаем новый "узел", со значением value
 
+            if (Count == 0) { endNode = node; } // Если список пустой делаем элемент "хвостом поезда"
+            else { startNode.Prev = node; }
+
             node.Next = startNode;              // Делаем "ссылку" на бывший первый элемент или на null если список пустой
             startNode = node;                   // Устанавливаем новый узел первым    
-            if (Count == 0) { endNode = node; } // Если список пустой делаем элемент "хвостом поезда"
 
             Count++;                            // Увеличиваем счетчик элементов
         }
@@ -430,5 +430,21 @@ namespace Algorithms
                 node = node.Next;
             }
         }
+
+        /// <summary>
+        /// Для вывода с конца списка
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable BackEnumerator()
+        {
+            Node node = endNode;
+            while (node != null)
+            {
+                yield return node.Value;
+                node = node.Prev;
+            }
+        }
+
+
     }
 }

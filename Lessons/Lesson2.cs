@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Algorithms.Node;
+using System;
 using System.Diagnostics;
 
-namespace Algorithms
+namespace Algorithms.Lessons
 {
     /// <summary>
     /// Второй урок

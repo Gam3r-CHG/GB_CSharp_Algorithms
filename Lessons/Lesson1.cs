@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Algorithms
+namespace Algorithms.Lessons
 {
     /// <summary>
     /// Первый урок

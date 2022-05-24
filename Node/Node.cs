@@ -1,4 +1,4 @@
-﻿namespace Algorithms
+﻿namespace Algorithms.Node
 {
     /// <summary>
     /// Класс хранит объект (узел) из списка
