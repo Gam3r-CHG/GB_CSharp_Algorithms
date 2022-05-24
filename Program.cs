@@ -1,4 +1,5 @@
 ﻿using System;
+using Algorithms.Menu;
 
 namespace Algorithms
 {
@@ -11,7 +12,9 @@ namespace Algorithms
         static void Main()
         {
             Console.Title = "Algorithm and Data Structure";
-            MainMenu.Show();
+
+            MenuBuilder mainMenu = new (Lists.MainMenu, "Main");
+
         }
 
     }
