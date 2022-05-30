@@ -38,6 +38,12 @@ namespace Algorithms.Menu
             "Тест сортировки и поиска в массивах",
         };
 
+        public static List<string> Lesson3Menu = new()
+        {
+            "Урок 3:",
+            "Тест скорости создания и обработки данных",
+        };
+
 
 
 
