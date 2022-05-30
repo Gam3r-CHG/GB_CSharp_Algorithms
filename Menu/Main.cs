@@ -25,6 +25,8 @@ namespace Algorithms.Menu
                     MenuBuilder lesson3 = new(Lists.Lesson3Menu, "Sub"); // Меню 3 урока
                     break;
                 case 4:
+                    MenuBuilder lesson4 = new(Lists.Lesson4Menu, "Sub"); // Меню 4 урока
+                    break;
                 case 5:
                 case 6:
                 case 7:

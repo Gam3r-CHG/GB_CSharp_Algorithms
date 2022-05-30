@@ -44,6 +44,13 @@ namespace Algorithms.Menu
             "Тест скорости создания и обработки данных",
         };
 
+        public static List<string> Lesson4Menu = new()
+        {
+            "Урок 4:",
+            "Бинарное дерево поиска",
+            "Тест скорости HashSet и массива"
+        };
+
 
 
 

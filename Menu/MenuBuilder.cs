@@ -52,7 +52,7 @@ namespace Algorithms.Menu
                         Lesson3.MenuOptions(menuOption);
                         break;
                     case "Урок 4:":
-                        //Lesson4.MenuOptions(menuOption);
+                        Lesson4.MenuOptions(menuOption);
                         break;
                     case "Урок 5:":
                         //Lesson5.MenuOptions(menuOption);
