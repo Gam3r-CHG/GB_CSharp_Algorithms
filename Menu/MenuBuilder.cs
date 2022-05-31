@@ -55,7 +55,7 @@ namespace Algorithms.Menu
                         Lesson4.MenuOptions(menuOption);
                         break;
                     case "Урок 5:":
-                        //Lesson5.MenuOptions(menuOption);
+                        Lesson5.MenuOptions(menuOption);
                         break;
                     case "Урок 6:":
                         //Lesson6.MenuOptions(menuOption);

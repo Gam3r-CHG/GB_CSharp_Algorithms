@@ -5,12 +5,12 @@ using Algorithms.Benchmark;
 namespace Algorithms.Lessons
 {
     /// <summary>
-    /// Третий урок
+    /// Четвертый урок
     /// </summary>
     internal class Lesson4
     {
         /// <summary>
-        /// Меню 3 урока (опции)
+        /// Меню 4 урока (опции)
         /// </summary>
         /// <param name="option">Опция меню</param>
         public static void MenuOptions(int option)
@@ -47,14 +47,14 @@ namespace Algorithms.Lessons
 
             Console.WriteLine("-----------------------------------------------------------------");
             Console.Write("Вывести значения по порядку (InOrder): ");
-            binaryTree.InOrder();
+            binaryTree.PrintInOrder();
             Console.WriteLine();
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("Вывести дерево графически сверху вниз (PreOrder):");
-            binaryTree.PreOrder();
+            binaryTree.PrintPreOrder();
             Console.WriteLine("-----------------------------------------------------------------");
             Console.Write("Вывести снизу вверх (PostOrder): ");
-            binaryTree.PostOrder();
+            binaryTree.PrintPostOrder();
             Console.WriteLine();
 
             Console.WriteLine("-----------------------------------------------------------------");
@@ -71,7 +71,7 @@ namespace Algorithms.Lessons
             binaryTree.Remove(11);
             Console.WriteLine("-----------------------------------------------------------------");
             Console.WriteLine("Вывести дерево графически сверху вниз (PreOrder):");
-            binaryTree.PreOrder();
+            binaryTree.PrintPreOrder();
             Console.WriteLine();
             Console.WriteLine("Количество элементов в дереве: " + binaryTree.Count);
             Console.WriteLine("-----------------------------------------------------------------");
