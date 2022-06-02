@@ -235,68 +235,151 @@ namespace Algorithms.BinaryTree
         }
 
 
-
         /// <summary>
         /// Вывести дерево на экран (InOrder)
         /// </summary>
-        public void InOrder()
+        public void PrintInOrder()
         {
-            InOrder(_root);
+            PrintInOrder(_root);
         }
 
-        private void InOrder(BinaryTreeNode<T> node)
+        private void PrintInOrder(BinaryTreeNode<T> node)
         {
             if (node.Left != null)
-                InOrder(node.Left);
+                PrintInOrder(node.Left);
 
             Console.Write(node.Value + " ");
 
             if (node.Right != null)
-                InOrder(node.Right);
+                PrintInOrder(node.Right);
+        }
+
+
+        /// <summary>
+        /// Поиск в дереве DFS (InOrder) рекурсия
+        /// </summary>
+        public void SearchInOrder(T searchValue)
+        {
+            SearchInOrder(_root, searchValue);
+        }
+
+        private void SearchInOrder(BinaryTreeNode<T> node, T searchValue)
+        {
+            if (node.Left != null)
+                SearchInOrder(node.Left, searchValue);
+            if (node.Value.CompareTo(searchValue) == 0) { Helpers.WriteColor(node.Value.ToString() + " ", ConsoleColor.Red); }
+            else { Console.Write(node.Value + " "); }
+
+            if (node.Right != null)
+                SearchInOrder(node.Right, searchValue);
         }
 
 
         /// <summary>
         /// Вывести дерево на экран (PostOrder)
         /// </summary>
-        public void PostOrder()
+        public void PrintPostOrder()
         {
-            PostOrder(_root);
+            PrintPostOrder(_root);
         }
 
-        private void PostOrder(BinaryTreeNode<T> node)
+        private void PrintPostOrder(BinaryTreeNode<T> node)
         {
             if (node.Left != null)
-                PostOrder(node.Left);
+                PrintPostOrder(node.Left);
 
             if (node.Right != null)
-                PostOrder(node.Right);
+                PrintPostOrder(node.Right);
 
             Console.Write(node.Value + " ");
         }
 
 
         /// <summary>
-        /// Вывести дерево на экран графически (PreOrder)
+        /// Поиск в дереве DFS (PostOrder) рекурсия
         /// </summary>
-        public void PreOrder()
+        public void SearchPostOrder(T searchValue)
         {
-            int index = 0;
-            PreOrder(_root, index);
+            SearchPostOrder(_root, searchValue);
         }
 
-        private void PreOrder(BinaryTreeNode<T> node, int index)
+        private void SearchPostOrder(BinaryTreeNode<T> node, T searchValue)
+        {
+            if (node.Left != null)
+                SearchPostOrder(node.Left, searchValue);
+
+            if (node.Right != null)
+                SearchPostOrder(node.Right, searchValue);
+
+            if (node.Value.CompareTo(searchValue) == 0) { Helpers.WriteColor(node.Value.ToString() + " ", ConsoleColor.Red); }
+            else { Console.Write(node.Value + " "); }
+        }
+
+
+        /// <summary>
+        /// Вывести дерево на экран графически (PreOrder)
+        /// </summary>
+        public void PrintPreOrder()
+        {
+            int index = 0;
+            PrintPreOrder(_root, index);
+        }
+
+        private void PrintPreOrder(BinaryTreeNode<T> node, int index)
         {
             string temp = "".PadLeft(index * 2, '─');
             Console.WriteLine("└" + temp + node.Value);
             index++;
 
             if (node.Left != null)
-                PreOrder(node.Left, index);
+                PrintPreOrder(node.Left, index);
 
             if (node.Right != null)
-                PreOrder(node.Right, index);
+                PrintPreOrder(node.Right, index);
         }
+
+
+        /// <summary>
+        /// Поиск в дереве DFS (PreOrder) рекурсия
+        /// </summary>
+        public void SearchPreOrder(T searchValue)
+        {
+            SearchPreOrder(_root, searchValue);
+        }
+
+        private void SearchPreOrder(BinaryTreeNode<T> node, T searchValue)
+        {
+            if (node.Value.CompareTo(searchValue) == 0) { Helpers.WriteColor(node.Value.ToString() + " ", ConsoleColor.Red); }
+            else { Console.Write(node.Value + " "); }
+
+            if (node.Left != null)
+                SearchPreOrder(node.Left, searchValue);
+
+            if (node.Right != null)
+                SearchPreOrder(node.Right, searchValue);
+        }
+
+
+        /// <summary>
+        /// Поиск в дереве BFS, с помощью очереди
+        /// </summary>
+        public void SearchBFS(T searchValue)
+        {
+            Queue<BinaryTreeNode<T>> queue = new Queue<BinaryTreeNode<T>>();
+            queue.Enqueue(_root);
+            while (queue.Count > 0)
+            {
+                BinaryTreeNode<T> current = queue.Dequeue();
+                if (current == null)
+                    continue;
+                queue.Enqueue(current.Left);
+                queue.Enqueue(current.Right);
+
+                if (current.Value.CompareTo(searchValue) == 0) { Helpers.WriteColor(current.Value.ToString() + " ", ConsoleColor.Red); }
+                else { Console.Write(current.Value + " "); }
+            }
+        }
+
 
         /// <summary>
         /// Для foreach. Вывести значения дерева по порядку, с помощью стека

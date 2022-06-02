@@ -51,6 +51,12 @@ namespace Algorithms.Menu
             "Тест скорости HashSet и массива"
         };
 
+        public static List<string> Lesson5Menu = new()
+        {
+            "Урок 5:",
+            "Поиск по бинарному дереву"
+        };
+
 
 
 
