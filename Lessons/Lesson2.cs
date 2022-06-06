@@ -7,31 +7,17 @@ namespace Algorithms.Lessons
     /// <summary>
     /// Второй урок
     /// </summary>
-    internal class Lesson2
+    internal class Lesson2 : ILessons
     {
-        /// <summary>
-        /// Меню 2 урока (опции)
-        /// </summary>
-        /// <param name="option">Опция меню</param>
-        public static void MenuOptions(int option)
-        {
-            switch (option)
-            {
-                case 1:
-                    NodeTest(); // Задание 1. Односвязный список
-                    Helpers.PressAnyKey(1);
-                    break;
-                case 2:
-                    DoubleNodeTest(); // Задание 1. Двусвязный список
-                    Helpers.PressAnyKey(1);
-                    break;
-                case 3:
-                    TestSearch(); // Задание 2. Поиск и массивы
-                    Helpers.PressAnyKey(1);
-                    break;
-            }
-        }
+        public static string LessonName = "Урок 2";
+        public static string LessonDescription = "Задания урока 2";
 
+        public static string[,] LessonMenuArray =
+        {
+            {"Тест односвязного списка", "NodeTest"},
+            {"Тест двусвязного списка", "DoubleNodeTest"},
+            {"Тест сортировки и поиска в массивах", "TestSearch"}
+        };
 
 
         /// <summary>
@@ -100,6 +86,8 @@ namespace Algorithms.Lessons
             node.Clear();
             node.Print();
             Console.WriteLine();
+
+            Helpers.PressAnyKey(1);
         }
 
 
@@ -170,6 +158,8 @@ namespace Algorithms.Lessons
             node.Clear();
             node.Print();
             Console.WriteLine();
+
+            Helpers.PressAnyKey(1);
         }
 
 
@@ -178,45 +168,51 @@ namespace Algorithms.Lessons
         /// </summary>
         public static void TestSearch()
         {
+            const int NUMBER_OF_ELEMENTS = 200_000;
+            const int SEARCH_NUMBER_1 = 33_000;
+            const int SEARCH_NUMBER_2 = 123456789;
+            const int TEST_INDEX_1 = 33_000;
+            const int TEST_INDEX_2 = 34_000;
+
             Console.Clear();
 
-            Console.WriteLine("Создаем массив из 100.000 произвольных элементов");
+            Console.WriteLine($"Создаем массив из {NUMBER_OF_ELEMENTS:#,#} произвольных элементов");
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
-            int[] arrayTest = ArrayTest.FillArray(100_000, 99_999);
+            int[] arrayTest = ArrayTest.FillArray(NUMBER_OF_ELEMENTS, NUMBER_OF_ELEMENTS);
             sw.Stop();
             Console.WriteLine($"Массив создан за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Помещаем элемент '123456789' в ячейку 33.000");
-            arrayTest[33_000] = 123456789;
-            Console.WriteLine("Запускаем линейный поиск элемента со значением 123456789. Сложность от O(N)");
+            Console.WriteLine($"Помещаем элемент {SEARCH_NUMBER_2} в ячейку {TEST_INDEX_1}");
+            arrayTest[TEST_INDEX_1] = SEARCH_NUMBER_2;
+            Console.WriteLine($"Запускаем линейный поиск элемента со значением {SEARCH_NUMBER_2}. Сложность от O(N)");
             sw.Restart();
-            long index = SearchTest.SimpleFind(arrayTest, 123456789);
+            (long, int) index = SearchTest.SimpleFind(arrayTest, SEARCH_NUMBER_2);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Создаем массив из 100.000 последовательных элементов");
+            Console.WriteLine($"Создаем массив из {NUMBER_OF_ELEMENTS} последовательных элементов");
             sw.Restart();
-            int[] arrayTest2 = ArrayTest.FillArraySorted(100_000);
+            int[] arrayTest2 = ArrayTest.FillArraySorted(NUMBER_OF_ELEMENTS);
             sw.Stop();
             Console.WriteLine($"Массив создан за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем двоичный поиск элемента со значением 33.000. Сложность O(log N)");
+            Console.WriteLine($"Запускаем двоичный поиск элемента со значением {SEARCH_NUMBER_1}. Сложность O(log N)");
             sw.Restart();
-            index = SearchTest.BinarySearch(arrayTest2, 33_000);
+            index = SearchTest.BinarySearch(arrayTest2, SEARCH_NUMBER_1);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем интерполяционный поиск элемента со значением 33.000. Сложность от O(log (log N)) до O(N).");
+            Console.WriteLine($"Запускаем интерполяционный поиск элемента со значением {SEARCH_NUMBER_1}. Сложность от O(log (log N)) до O(N).");
             sw.Start();
-            index = SearchTest.InterpolationSearch(arrayTest2, 100_000, 33_000);
+            index = SearchTest.InterpolationSearch(arrayTest2, NUMBER_OF_ELEMENTS, SEARCH_NUMBER_1);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
             //????????????????????????????????????????????????????????????????????????????????????
@@ -225,55 +221,95 @@ namespace Algorithms.Lessons
             // В теории должно же быть наоборот. Почему так?
             //????????????????????????????????????????????????????????????????????????????????????
 
-            Console.WriteLine("Помещаем элемент '33.000' в ячейку 34.000 в массив с произвольными числами");
-            arrayTest[34_000] = 33_000;
-            int[] arrayTemp = new int[100_000];
-            Array.Copy(arrayTest, arrayTemp, 100_000);
+            Console.WriteLine($"Помещаем элемент {SEARCH_NUMBER_1} в ячейку {TEST_INDEX_2} в массив с произвольными числами");
+            arrayTest[TEST_INDEX_2] = SEARCH_NUMBER_1;
+            int[] arrayTemp0 = new int[NUMBER_OF_ELEMENTS];
+            int[] arrayTemp1 = new int[NUMBER_OF_ELEMENTS];
+            int[] arrayTemp2 = new int[NUMBER_OF_ELEMENTS];
+            int[] arrayTemp3 = new int[NUMBER_OF_ELEMENTS];
+            int[] arrayTemp4 = new int[NUMBER_OF_ELEMENTS];
+            int[] arrayTemp5 = new int[NUMBER_OF_ELEMENTS];
+
+            Array.Copy(arrayTest, arrayTemp0, NUMBER_OF_ELEMENTS);
+            Array.Copy(arrayTest, arrayTemp1, NUMBER_OF_ELEMENTS);
+            Array.Copy(arrayTest, arrayTemp2, NUMBER_OF_ELEMENTS);
+            Array.Copy(arrayTest, arrayTemp3, NUMBER_OF_ELEMENTS);
+            Array.Copy(arrayTest, arrayTemp4, NUMBER_OF_ELEMENTS);
+
             Console.WriteLine("Запускаем простую сортировку массива с произвольными числами");
             Console.WriteLine("Запаситесь терпеньем ;)");
             sw.Restart();
             ArrayTest.BubbleSort(arrayTest);
             sw.Stop();
-            Console.WriteLine();
             Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Для сравнения сортировка штатными средствами C#");
+            Console.WriteLine("Запускаем улучшенную \"пузырьковую\" сортировку массива с произвольными числами");
+            Console.WriteLine("Запаситесь терпеньем ;)");
             sw.Restart();
-            Array.Sort(arrayTemp);
+            ArrayTest.BubbleSortPlus(arrayTemp0);
+            sw.Stop();
+            Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+            Console.WriteLine("Для сравнения сортировка вставками");
+            sw.Restart();
+            ArrayTest.InsertionSort(arrayTemp2);
             sw.Stop();
             Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. !!! и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем линейный поиск элемента со значением 123456789. ");
+            Console.WriteLine("Для сравнения сортировка QuickSort");
+            sw.Restart();
+            ArrayTest.QuickSort(arrayTemp3, 0, arrayTemp3.Length - 1);
+            sw.Stop();
+            Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. !!! и {sw.ElapsedTicks} тактов");
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+            Console.WriteLine("Для сравнения сортировка QuickSort2");
+            sw.Restart();
+            arrayTemp5 = ArrayTest.SortArray(arrayTemp4, 0, arrayTemp4.Length - 1);
+            sw.Stop();
+            Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. !!! и {sw.ElapsedTicks} тактов");
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+            Console.WriteLine("Для сравнения сортировка штатными средствами C#");
+            sw.Restart();
+            Array.Sort(arrayTemp1);
+            sw.Stop();
+            Console.WriteLine($"Массив отсортирован за {sw.ElapsedMilliseconds} мс. !!! и {sw.ElapsedTicks} тактов");
+            Console.WriteLine("------------------------------------------------------------------------------------");
+
+            Console.WriteLine($"Запускаем линейный поиск элемента со значением {SEARCH_NUMBER_2}.");
             Console.WriteLine("Теперь он последний в массиве. Сложность от O(N)");
             sw.Restart();
-            index = SearchTest.SimpleFind(arrayTest, 123456789);
+            index = SearchTest.SimpleFind(arrayTest, SEARCH_NUMBER_2);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем линейный поиск элемента со значением 33.000.");
+            Console.WriteLine($"Запускаем линейный поиск элемента со значением {SEARCH_NUMBER_1}.");
             sw.Restart();
-            index = SearchTest.SimpleFind(arrayTest, 33_000);
+            index = SearchTest.SimpleFind(arrayTest, SEARCH_NUMBER_1);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем двоичный поиск элемента со значением 33.000. Сложность O(log N)");
+            Console.WriteLine($"Запускаем двоичный поиск элемента со значением {SEARCH_NUMBER_1}. Сложность O(log N)");
             sw.Restart();
-            index = SearchTest.BinarySearch(arrayTest, 33_000);
+            index = SearchTest.BinarySearch(arrayTest, SEARCH_NUMBER_1);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
-            Console.WriteLine("Запускаем интерполяционный поиск элемента со значением 33.000. Сложность от O(log (log N)) до O(N).");
+            Console.WriteLine($"Запускаем интерполяционный поиск элемента со значением {SEARCH_NUMBER_1}. Сложность от O(log (log N)) до O(N).");
             sw.Start();
-            index = SearchTest.InterpolationSearch(arrayTest, 100_000, 33_000);
+            index = SearchTest.InterpolationSearch(arrayTest, NUMBER_OF_ELEMENTS, SEARCH_NUMBER_1);
             sw.Stop();
-            Console.WriteLine($"Элемент {index} найден за {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
+            Console.WriteLine($"Элемент {index.Item1} найден за {index.Item2} итераций, {sw.ElapsedMilliseconds} мс. и {sw.ElapsedTicks} тактов");
             Console.WriteLine("------------------------------------------------------------------------------------");
 
+            Helpers.PressAnyKey(1);
         }
 
 

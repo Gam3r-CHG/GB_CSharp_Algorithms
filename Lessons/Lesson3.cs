@@ -6,27 +6,21 @@ namespace Algorithms.Lessons
     /// <summary>
     /// Третий урок
     /// </summary>
-    internal class Lesson3
+    internal class Lesson3 : ILessons
     {
-        /// <summary>
-        /// Меню 3 урока (опции)
-        /// </summary>
-        /// <param name="option">Опция меню</param>
-        public static void MenuOptions(int option)
+        public static string LessonName = "Урок 3";
+        public static string LessonDescription = "Задания урока 3";
+
+        public static string[,] LessonMenuArray = 
         {
-            switch (option)
-            {
-                case 1:
-                    Bench(); // Задание 1. Тест скорости обработки данных в классе и структуре
-                    Helpers.PressAnyKey(1);
-                    break;
-            }
-        }
+            {"Тест скорости создания и обработки данных", "Bench"}
+        };
+
 
         /// <summary>
         /// Запуск тест скорости
         /// </summary>
-        static void Bench()
+        public static void Bench()
         {
             BenchIt.Run(100_000);
             Console.WriteLine("\n");
@@ -34,6 +28,8 @@ namespace Algorithms.Lessons
             Console.WriteLine("\n");
             BenchIt.Run(10_000_000);
             Console.WriteLine();
+
+            Helpers.PressAnyKey(1);
         }
 
     }
