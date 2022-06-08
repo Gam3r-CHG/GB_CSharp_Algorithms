@@ -7,28 +7,22 @@ namespace Algorithms.Lessons
     /// <summary>
     /// Четвертый урок
     /// </summary>
-    internal class Lesson4
+    internal class Lesson4 : ILessons
     {
-        /// <summary>
-        /// Меню 4 урока (опции)
-        /// </summary>
-        /// <param name="option">Опция меню</param>
-        public static void MenuOptions(int option)
-        {
-            switch (option)
-            {
-                case 1:
-                    TestBinaryTree(); // Задание 1. Бинарное дерево поиска
-                    Helpers.PressAnyKey(1);
-                    break;
-                case 2:
-                    HashTest.TestSpeedSearch(); // Задание 2. Сравнение скорости HashSet и массива
-                    Helpers.PressAnyKey(1);
-                    break;
-            }
-        }
+        public static string LessonName = "Урок 4";
+        public static string LessonDescription = "Задания урока 4";
 
-        private static void TestBinaryTree()
+        public static string[,] LessonMenuArray = 
+        {
+            {"Бинарное дерево поиска", "TestBinaryTree"},
+            {"Тест скорости HashSet и массива", "Task2"}
+        };
+
+
+        /// <summary>
+        /// Задание 1. Бинарное дерево поиска
+        /// </summary>
+        public static void TestBinaryTree()
         {
             BinaryTree<int> binaryTree = new BinaryTree<int>();
 
@@ -84,6 +78,18 @@ namespace Algorithms.Lessons
             binaryTree.Clear();
             Console.WriteLine("Количество элементов в дереве: " + binaryTree.Count);
             Console.WriteLine("-----------------------------------------------------------------");
+
+            Helpers.PressAnyKey(1);
+        }
+
+
+        /// <summary>
+        /// Задание 2. Сравнение скорости HashSet и массива
+        /// </summary>
+        public static void Task2()
+        {
+            HashTest.TestSpeedSearch();
+            Helpers.PressAnyKey(1);
         }
 
     }

@@ -6,24 +6,21 @@ namespace Algorithms.Lessons
     /// <summary>
     /// Пятый урок
     /// </summary>
-    internal class Lesson5
+    internal class Lesson5 : ILessons
     {
-        /// <summary>
-        /// Меню 5 урока (опции)
-        /// </summary>
-        /// <param name="option">Опция меню</param>
-        public static void MenuOptions(int option)
-        {
-            switch (option)
-            {
-                case 1:
-                    TestBinaryTreeSearch(); // Задание 1. Поиск по бинарному дереву
-                    Helpers.PressAnyKey(1);
-                    break;
-            }
-        }
+        public static string LessonName = "Урок 5";
+        public static string LessonDescription = "Задания урока 5";
 
-        private static void TestBinaryTreeSearch()
+        public static string[,] LessonMenuArray = 
+        {
+            {"Поиск по бинарному дереву", "TestBinaryTreeSearch"}
+        };
+
+
+        /// <summary>
+        /// Поиск по бинарному дереву
+        /// </summary>
+        public static void TestBinaryTreeSearch()
         {
             BinaryTree<int> binaryTree = new BinaryTree<int>();
 
@@ -72,6 +69,8 @@ namespace Algorithms.Lessons
             binaryTree.SearchBFS(14);
             Console.WriteLine();
             Console.WriteLine("-----------------------------------------------------------------");
+
+            Helpers.PressAnyKey(1);
         }
 
     }

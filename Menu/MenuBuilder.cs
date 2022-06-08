@@ -1,112 +1,124 @@
-﻿using Algorithms.Lessons;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace Algorithms.Menu
+namespace Menu
 {
     /// <summary>
     /// Создание меню и подменю
     /// </summary>
-    internal class MenuBuilder
+    public class MenuBuilder
     {
-        List<string> List { get; } // Список элементов меню
-        string MenuType { get; } // Тип меню (Main или Sub)
+        private string InterfaceName;
+        private List<string> menuClassList = new();
+        private List<string> menuNameList = new();
 
 
         /// <summary>
-        /// Конструктор меню
+        /// Конструктор меню уроков по заданному интерфейсу
         /// </summary>
-        /// <param name="list">Список элементов</param>
-        /// <param name="menuType">Тип меню (Main, Sub)</param>
-        public MenuBuilder(List<string> list, string menuType)
+        /// <param name="interfaceName">Название интерфейса для построения меню</param>
+        public MenuBuilder(string interfaceName)
         {
-            List = list;
-            MenuType = menuType;
-            Init();
+            InterfaceName = interfaceName;
+            GetMainMenu();
+            PrintMainMenu();
         }
 
 
         /// <summary>
-        /// Инициализация меню
+        /// Получение списка уроков для меню и создание двух списков с названиями классов и уроков
         /// </summary>
-        void Init()
+        private void GetMainMenu()
         {
-            int menuOption = -1;
-            while (menuOption != 0)
+            Type type = Type.GetType(InterfaceName);   // Интерфейс для поиска классов с уроками
+
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface); // Получить список классов, наследуемых интерфейс
+
+            foreach (var t in types) // Пройти по всем наследникам и собрать информацию
             {
-                Print();
-                menuOption = AskForKey(List.Count - 1);
-
-                switch (List[0]) // Выбор действия в зависимости от названия меню (первая строчка списка)
-                {
-                    case "Главное меню:":
-                        Main.MenuOptions(menuOption);
-                        break;
-                    case "Урок 1:":
-                        Lesson1.MenuOptions(menuOption);
-                        break;
-                    case "Урок 2:":
-                        Lesson2.MenuOptions(menuOption);
-                        break;
-                    case "Урок 3:":
-                        Lesson3.MenuOptions(menuOption);
-                        break;
-                    case "Урок 4:":
-                        Lesson4.MenuOptions(menuOption);
-                        break;
-                    case "Урок 5:":
-                        Lesson5.MenuOptions(menuOption);
-                        break;
-                    case "Урок 6:":
-                        //Lesson6.MenuOptions(menuOption);
-                        break;
-                    case "Урок 7:":
-                        //Lesson7.MenuOptions(menuOption);
-                        break;
-                    case "Урок 8:":
-                        //Lesson8.MenuOptions(menuOption);
-                        break;
-                }
-
+                menuClassList.Add(t.AssemblyQualifiedName);     // Добавить в список полное название классов
+                menuNameList.Add(t.GetField("LessonName").GetValue(null).ToString());  // Добавить в список название уроков
             }
         }
 
 
         /// <summary>
-        /// Вывод меню на экран
+        /// Вывод главного меню на экран
         /// </summary>
-        void Print()
+        private void PrintMainMenu()
         {
-            Console.Clear();
+            int keyNumber = -1;
 
-            Helpers.WriteLineColor(List[0], ConsoleColor.Blue); // Название меню
-            Console.WriteLine();
-
-            int index = 0;
-            foreach (var menuItem in List)
+            while (keyNumber != 0) // Бесконечный цикл, пока не нажата клавиша для выхода
             {
-                if (index > 0)
+                Console.Clear();
+
+                Helpers.WriteLineColor("Главное меню", ConsoleColor.Blue); // Название меню
+                Console.WriteLine();
+
+                int index = 1; // Для индекса
+                foreach (var t in menuNameList)  // Пронумеровать и вывести на экран
                 {
-                    Console.WriteLine(index + ". " + menuItem); // Элементы меню
+                    Console.WriteLine(index + ". " + t);
+                    index++;
                 }
-                index++;
-            }
 
-            // Выбор текста для последних строчек меню
-            if (MenuType == "Main") // Если это главное меню
-            {
                 Console.WriteLine();
                 Helpers.WriteLineColor("Для выбора нажмите клавишу с цифрой", ConsoleColor.Green);
                 Helpers.WriteLineColor("Для выхода из программы нажмите BackSpace или Escape", ConsoleColor.Green);
+
+                Console.WriteLine();
+
+                keyNumber = AskForKey(menuNameList.Count);  // Запросить клавишу для выбора опции
+
+                if (keyNumber == 0) return;                 // Если нажата клавиша для выхода
+
+                // Вызвать метод PrintSubMenu и передать название класса с выбранным уроком
+                Type subMenuType = Type.GetType(menuClassList[keyNumber - 1]);
+
+                PrintSubMenu(subMenuType);
             }
-            if (MenuType == "Sub") // Если это подменю
+        }
+
+
+        /// <summary>
+        /// Вывод подменю на экран
+        /// </summary>
+        private void PrintSubMenu(Type subMenu)
+        {
+            int keyNumber = -1;
+            while (keyNumber != 0) // Бесконечный цикл, пока не нажата клавиша для выхода
             {
+                Console.Clear();
+
+                string lessonName = subMenu.GetField("LessonName").GetValue(null).ToString();
+
+                Helpers.WriteLineColor(lessonName, ConsoleColor.Blue); // Название подменю
+                Console.WriteLine();
+
+                // Считать массив с названиями пунктов и методов
+                string[,] menuArray = (string[,])subMenu.GetField("LessonMenuArray").GetValue(null);
+                
+                for (int i = 0; i < menuArray.GetLength(0); i++)  // Пронумеровать и вывести на экран
+                {
+                    Console.WriteLine((i + 1) + ". " + menuArray[i, 0]);
+                }
+
                 Console.WriteLine();
                 Helpers.WriteLineColor("Для выбора нажмите клавишу с цифрой", ConsoleColor.Green);
                 Helpers.WriteLineColor("Для возврата в главное меню нажмите BackSpace или Escape", ConsoleColor.Green);
-            }
+                Console.WriteLine();
 
-            Console.WriteLine();
+                keyNumber = AskForKey(menuArray.GetLength(0)); // Запросить клавишу для выбора опции
+                if (keyNumber == 0) return; // Если нажата клавиша для выхода
+
+                string methodName = menuArray[keyNumber - 1, 1]; // Название метода для запуска
+
+                subMenu.GetMethod(methodName).Invoke(null, null); // Вызвать метод
+            }
         }
 
 
@@ -115,12 +127,11 @@ namespace Algorithms.Menu
         /// </summary>
         /// <param name="max">Максимальное число для запроса</param>
         /// <returns>Число введенное пользователем или 0</returns>
-        static int AskForKey(int max)
+        private static int AskForKey(int max)
         {
             ConsoleKeyInfo key = new ConsoleKeyInfo();
 
             int pressKeyNumber;  // Возвращаемая клавиша
-
 
             //Запрашивать, пока пользователь не нажмет нужные клавиши
             do
